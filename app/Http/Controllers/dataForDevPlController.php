@@ -6,6 +6,7 @@ use App\Models\pages;
 use App\Models\DataForDevPl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,8 +24,8 @@ class dataForDevPlController extends Controller
         ->get();
         if(count($data) > 0){
             $page = pages::find(Crypt::decryptString($request->id_page));
-            $data_json = Storage::json($page->filePath);
-            return response()->json($data_json);
+            $data_json = Http::get($page->filePath);
+            return response()->json(json_decode($data_json));
         }else{
             return response()->json([
                 'message' => 'Unauthorized'
@@ -76,11 +77,5 @@ class dataForDevPlController extends Controller
         ->where('viewport_name', $request->viewport)
         ->first();
         return response()->json($access_token, 200);
-    }
-    // FIXME: This code will be deleted after the test
-    public function ecryptData(){
-        $project_id = Crypt::encryptString('11');
-        $page_id = Crypt::encryptString('14');
-        return response()->json('http://127.0.0.1:5500/?access_token=3w33ww3r6f6f5e5e88ffggw&project_id='.$project_id.'&page_id='. $page_id .'&language_name=en&viewport_name=Desktop');
     }
 }

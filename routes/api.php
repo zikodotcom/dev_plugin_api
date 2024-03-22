@@ -53,7 +53,6 @@ Route::prefix('projects')->group(function (){
 // TODO: Page route
 
 Route::prefix('pages')->group(function (){
-    Route::post('/', [pagesController::class, 'changeDataJson']);
     Route::get('/listPage/{id}', [pagesController::class, 'listPage']);
     Route::get('/listLanguage/{id_page}/{id_projects}', [pagesController::class, 'listLanguage']);
     Route::post('/getDataFrame', [pagesController::class, 'frameData']);
